@@ -22,8 +22,15 @@ END_MESSAGE_MAP()
 
 CSimpleDcmViewerApp::CSimpleDcmViewerApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+
+	AllocConsole();
+	freopen("CONOUT$", "a", stderr);
+	COORD consoleCoord;
+	consoleCoord.X = 80;
+	consoleCoord.Y = 1200;
+	SetConsoleScreenBufferSize(GetStdHandle(STD_ERROR_HANDLE), consoleCoord);
+	fprintf(stderr, "start\n");
+
 }
 
 

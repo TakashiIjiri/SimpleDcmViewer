@@ -4,7 +4,7 @@
 
 
 // DCMTK
-#include "./include/dcmtk/dcmdata/dctk.h"
+#include "./dcmtk/dcmdata/dctk.h"
 
 #pragma comment(lib, "dcmdata.lib")
 #pragma comment(lib, "oflog.lib")
