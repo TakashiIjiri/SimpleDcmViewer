@@ -1,0 +1,10 @@
+# SimpleDcmViewer
+
+NOTE:
+This software is a simple dicom volumetric image viewer, written by Takashi Ijiri.
+
+
+LICENSE:
+The software is released under BSD license.
+The software includes DCMTK released by OFFIS e.V. under BSD license. 
+See ./LICENSE for detail.
