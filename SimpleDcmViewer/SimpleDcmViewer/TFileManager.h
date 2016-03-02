@@ -25,12 +25,12 @@ public:
 	float m_valMax, m_valMin;
 
 	//volume image
-	float *m_vol;
+	float **m_volume;
 
 
 	void getSliceImg_Zth_slice(int z, float *img)
 	{
-		memcpy(img, &m_vol[z * m_W * m_H], sizeof(float) * m_W * m_H);
+		memcpy(img, m_volume[z], sizeof(float) * m_W * m_H);
 
 	}
 

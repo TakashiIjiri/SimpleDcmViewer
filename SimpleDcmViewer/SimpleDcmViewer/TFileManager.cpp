@@ -11,7 +11,7 @@ using namespace std;
 
 TFileManager::TFileManager()
 {
-	m_vol = 0;
+	m_volume = 0;
 	m_W = m_H = m_D = 0;
 	m_pW = m_pH = m_pD = 0;
 }
@@ -20,6 +20,12 @@ TFileManager::TFileManager()
 
 TFileManager::~TFileManager()
 {
+	if (m_volume != 0)
+	{
+		for (int i = 0; i < m_D; ++i) delete[] m_volume[i];
+		delete[] m_volume;
+	}
+
 }
 
 
@@ -67,7 +73,11 @@ static void t_getAllFltFilesInDir(const char *dirpath, vector<string> &files)
 
 void TFileManager::loadDirectry(const string dirPath)
 {
-	if( m_vol != 0) delete[] m_vol;
+	if (m_volume != 0) 
+	{
+		for (int i = 0; i < m_D; ++i) delete[] m_volume[i];
+		delete[] m_volume;
+	}
 
 
 	//read all dcm in the dirPath
@@ -92,8 +102,13 @@ void TFileManager::loadDirectry(const string dirPath)
 		m_pW  = tdcm.getPitchX();
 		m_pH  = tdcm.getPitchY();
 		zPos0 = tdcm.getZPos();
-		m_vol = new float[m_W*m_H*m_D];
+		fprintf(stderr, "resolution %d %d %d\n", m_W, m_H, m_D);
+
+		m_volume = new float*[m_D];
+		fprintf(stderr, "resolution %d %d %d\n", m_W, m_H, m_D);
+
 	}
+
 
 	//load all dicom file
 	for (int k = 0; k < m_D; ++k)
@@ -109,14 +124,24 @@ void TFileManager::loadDirectry(const string dirPath)
 		}
 		if (k == 1) m_pD = fabs(zPos0 - tdcm.getZPos());
 
-		tdcm.getPixelsToFlt(&m_vol[m_W * m_H * k]);
+		m_volume[k] = new float[m_W * m_H];
+		tdcm.getPixelsToFlt(m_volume[k]);
 
-		fprintf(stderr, "a");
 	}
 
-	for( int i=0, s = m_W * m_H * m_D; i<s; ++i)
-	{
-		m_valMin = min(m_valMin, m_vol[i] );
-		m_valMax = max(m_valMax, m_vol[i] );
+	m_valMin =  FLT_MAX;
+	m_valMax = -FLT_MAX;
+
+
+	for (int z = 0; z < m_D; ++z)
+	{ 
+		for (int i = 0; i < m_W*m_W; ++i)
+		{
+			m_valMin = min(m_valMin, m_volume[z][i]);
+			m_valMax = max(m_valMax, m_volume[z][i]);
+		}
 	}
+
+	fprintf(stderr, "%f %f\n", m_valMin, m_valMax);
+
 }

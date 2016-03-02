@@ -60,4 +60,5 @@ public:
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnBnClickedButtonExporttraw3d();
 	afx_msg void OnBnClickedButtonQuit();
+	afx_msg void OnBnClickedButtonExporttraw3dUshort();
 };

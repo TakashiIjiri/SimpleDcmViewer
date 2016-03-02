@@ -1,8 +1,9 @@
-
-
-
 // SimpleDcmViewerDlg.cpp : implementation file
 //
+
+
+
+
 
 #include "stdafx.h"
 #include "SimpleDcmViewer.h"
@@ -20,8 +21,9 @@ using namespace std;
 #endif
 
 #pragma warning( disable: 4996 )
+
+
 #define PC_SIZE 700
-// CSimpleDcmViewerDlg dialog
 
 
 
@@ -50,29 +52,29 @@ void CSimpleDcmViewerDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CSimpleDcmViewerDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_EN_CHANGE(IDC_EDIT_CLIPXMIN, &CSimpleDcmViewerDlg::OnEnChangeEditClipxmin)
-	ON_EN_CHANGE(IDC_EDIT_CLIPXMAX, &CSimpleDcmViewerDlg::OnEnChangeEditClipxmax)
-	ON_EN_CHANGE(IDC_EDIT_CLIPYMIN, &CSimpleDcmViewerDlg::OnEnChangeEditClipymin)
-	ON_EN_CHANGE(IDC_EDIT_CLIPYMAX, &CSimpleDcmViewerDlg::OnEnChangeEditClipymax)
-	ON_EN_CHANGE(IDC_EDIT_CLIPZMIN, &CSimpleDcmViewerDlg::OnEnChangeEditClipzmin)
-	ON_EN_CHANGE(IDC_EDIT_CLIPZMAX, &CSimpleDcmViewerDlg::OnEnChangeEditClipzmax)
 	ON_WM_DROPFILES()
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
+	ON_EN_CHANGE (IDC_EDIT_CLIPXMIN		 , &CSimpleDcmViewerDlg::OnEnChangeEditClipxmin)
+	ON_EN_CHANGE (IDC_EDIT_CLIPXMAX		 , &CSimpleDcmViewerDlg::OnEnChangeEditClipxmax)
+	ON_EN_CHANGE (IDC_EDIT_CLIPYMIN		 , &CSimpleDcmViewerDlg::OnEnChangeEditClipymin)
+	ON_EN_CHANGE (IDC_EDIT_CLIPYMAX		 , &CSimpleDcmViewerDlg::OnEnChangeEditClipymax)
+	ON_EN_CHANGE (IDC_EDIT_CLIPZMIN		 , &CSimpleDcmViewerDlg::OnEnChangeEditClipzmin)
+	ON_EN_CHANGE (IDC_EDIT_CLIPZMAX		 , &CSimpleDcmViewerDlg::OnEnChangeEditClipzmax)
 	ON_BN_CLICKED(IDC_BUTTON_EXPORTTRAW3D, &CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d)
-	ON_BN_CLICKED(IDC_BUTTON_QUIT, &CSimpleDcmViewerDlg::OnBnClickedButtonQuit)
+	ON_BN_CLICKED(IDC_BUTTON_QUIT		 , &CSimpleDcmViewerDlg::OnBnClickedButtonQuit)
+	ON_BN_CLICKED(IDC_BUTTON_EXPORTTRAW3D_USHORT, &CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3dUshort)
 END_MESSAGE_MAP()
 
 
-// CSimpleDcmViewerDlg message handlers
+
+
 
 BOOL CSimpleDcmViewerDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
 	DragAcceptFiles();
-
-
 
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
@@ -96,6 +98,7 @@ BOOL CSimpleDcmViewerDlg::OnInitDialog()
 	WINDOWPLACEMENT wplm_dlg, wplm_pc;
 	this->GetWindowPlacement( &wplm_dlg );
 	h_PC->GetWindowPlacement( &wplm_pc  );
+
 
 	//resize dlg
 	int dlgW = wplm_dlg.rcNormalPosition.right  - wplm_dlg.rcNormalPosition.left;
@@ -160,6 +163,14 @@ static void t_cropI(int &x, const int &minV, const int &maxV)
 	if (x > maxV) x = maxV;
 }
 
+static void t_cropD(double &x, const double &minV, const double &maxV)
+{
+	if (x < minV) x = minV;
+	if (x > maxV) x = maxV;
+}
+
+
+
 
 void CSimpleDcmViewerDlg::drawPictCtrl()
 {
@@ -207,8 +218,8 @@ void CSimpleDcmViewerDlg::drawPictCtrl()
 	const int    imgH = TFileManager::getInst()->m_H;
 	const int    imgD = TFileManager::getInst()->m_D;
 	const int    imgZ = m_slider_z       .GetPos();
-	const short  vMax = m_slider_winLvMax.GetPos();
-	const short  vMin = m_slider_winLvMin.GetPos();
+	const float  vMax = (float)m_slider_winLvMax.GetPos();
+	const float  vMin = (float)m_slider_winLvMin.GetPos();
 	int x0 = m_spin_clipXmin.GetPos32(), x1 = m_spin_clipXmax.GetPos32();  t_cropI(x0, 0, imgW - 1);  t_cropI(x0, 0, imgW - 1);
 	int y0 = m_spin_clipYmin.GetPos32(), y1 = m_spin_clipYmax.GetPos32();  t_cropI(y0, 0, imgH - 1);  t_cropI(y0, 0, imgH - 1);
 	int z0 = m_spin_clipZmin.GetPos32(), z1 = m_spin_clipZmax.GetPos32();  t_cropI(z0, 0, imgD - 1);  t_cropI(z0, 0, imgD - 1);
@@ -217,7 +228,7 @@ void CSimpleDcmViewerDlg::drawPictCtrl()
 
 
 	const int WH = imgW * imgH;
-	float *sliceImg = &TFileManager::getInst()->m_vol[imgZ * WH];
+	float *sliceImg = TFileManager::getInst()->m_volume[imgZ];
 
 	double xCoef = imgW / (double)PC_SIZE;
 	double yCoef = imgH / (double)PC_SIZE;
@@ -229,12 +240,12 @@ void CSimpleDcmViewerDlg::drawPictCtrl()
 			int imgX = (int)((x + 0.5) * xCoef);
 			int imgY = (int)((y + 0.5) * yCoef);
 			int imgI = imgX + imgY * imgW;
-			const short imgV = (short)sliceImg[imgI];
+			const float imgV = sliceImg[imgI];
 
 			int bmpI = (x + y * PC_SIZE) * 4;
 			if (x0 <= imgX && imgX <= x1 && y0 <= imgY && imgY <= y1 && z0 <= imgZ && imgZ <= z1)
 			{
-				byte c = (byte)(255.0 * min(1, max(0, (imgV - vMin) / (double)(vMax - vMin))));
+				byte c = (byte)(255.0 * min(1, max(0, (imgV - vMin) / (vMax - vMin))));
 				bmpbits[bmpI + 0] = bmpbits[bmpI + 1] = bmpbits[bmpI + 2] = c;
 			}
 			else {
@@ -253,28 +264,6 @@ void CSimpleDcmViewerDlg::drawPictCtrl()
 	pcWnd->ReleaseDC(pcDC);
 }
 //m_backBrush.CreateSolidBrush(RGB(50, 50, 50));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -363,6 +352,8 @@ void CSimpleDcmViewerDlg::OnEnChangeEditClipzmax()
 
 
 
+
+
 void CSimpleDcmViewerDlg::OnDropFiles(HDROP hDropInfo)
 {
 	UINT numFile = DragQueryFile(hDropInfo, ~0lu, NULL, 0);
@@ -440,7 +431,6 @@ void CSimpleDcmViewerDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScroll
 
 
 
-
 //directry loading íºå„Ç…åƒÇŒÇÍÇÈ
 void CSimpleDcmViewerDlg::NewVolumeLoaded()
 {
@@ -455,18 +445,27 @@ void CSimpleDcmViewerDlg::NewVolumeLoaded()
 
 	//clipping info (doubleílÇÃCubeSizeÇ≈êßå‰)
 	const int W = FM->m_W, H = FM->m_H, D = FM->m_D;
-	m_spin_clipXmin.SetRange32(0, W - 1); m_spin_clipXmax.SetRange32(0, W - 1);
-	m_spin_clipYmin.SetRange32(0, H - 1); m_spin_clipYmax.SetRange32(0, H - 1);
-	m_spin_clipZmin.SetRange32(0, D - 1); m_spin_clipZmax.SetRange32(0, D - 1);
-	m_spin_clipXmin.SetPos32( 0 );        m_spin_clipXmax.SetPos32( W - 1 );
-	m_spin_clipYmin.SetPos32( 0 );        m_spin_clipYmax.SetPos32( H - 1 );
-	m_spin_clipZmin.SetPos32( 0 );        m_spin_clipZmax.SetPos32( D - 1 );
+	m_spin_clipXmin.SetRange32(0, W - 1); 
+	m_spin_clipXmax.SetRange32(0, W - 1);
+	m_spin_clipYmin.SetRange32(0, H - 1); 
+	m_spin_clipYmax.SetRange32(0, H - 1);
+	m_spin_clipZmin.SetRange32(0, D - 1); 
+	m_spin_clipZmax.SetRange32(0, D - 1);
+
+	m_spin_clipXmin.SetPos32( 0     ); 
+	m_spin_clipXmax.SetPos32( W - 1 );
+	m_spin_clipYmin.SetPos32( 0     );
+	m_spin_clipYmax.SetPos32( H - 1 );
+	m_spin_clipZmin.SetPos32( 0     );
+	m_spin_clipZmax.SetPos32( D - 1 );
 
 	//window level 
 	m_slider_winLvMin.SetRange( (int)FM->m_valMin, (int)FM->m_valMax);  m_slider_winLvMin.SetPos((int)FM->m_valMin);
 	m_slider_winLvMax.SetRange( (int)FM->m_valMin, (int)FM->m_valMax);  m_slider_winLvMax.SetPos((int)FM->m_valMax);
-	CString CStrMin; CStrMin.Format("%d", m_slider_winLvMin.GetPos());
-	CString CStrMax; CStrMax.Format("%d", m_slider_winLvMax.GetPos());
+
+	CString CStrMin, CStrMax;
+	CStrMin.Format("%d", m_slider_winLvMin.GetPos());
+	CStrMax.Format("%d", m_slider_winLvMax.GetPos());
 	((CEdit*)GetDlgItem(IDC_EDIT_WINLV_MAX))->SetWindowTextA(CStrMax);
 	((CEdit*)GetDlgItem(IDC_EDIT_WINLV_MIN))->SetWindowTextA(CStrMin);
 
@@ -500,8 +499,6 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 	string fname(dlg.GetPathName());
 	if (strcmp(dlg.GetFileExt(), "traw3D_ss") != 0) fname = fname + ".traw3D_ss";
 
-
-
 	//ìôï˚voxelÇèoóÕÇ∑ÇÈ
 	TFileManager* FM = TFileManager::getInst();
 
@@ -518,7 +515,6 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 								(int)((in_y1 - in_y0 + 1) * FM->m_pH / pitchMin),
 								(int)((in_z1 - in_z0 + 1) * FM->m_pD / pitchMin));
 	
-
 	if (paramDlg.DoModal() != IDOK) return;
 	int  outW   = paramDlg.m_expW;
 	int  outH   = paramDlg.m_expH;
@@ -533,9 +529,6 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 	fprintf(stderr, "resolution (%d %d %d)\n", outW, outH, outD);
 	fprintf(stderr, "rate       (%f %f %f)\n", rateW, rateH, rateD);
 	fprintf(stderr, "pitch      (%f %f %f)\n", pW, pH, pD);
-
-
-
 
 
 	//file open ------------------------------------
@@ -587,13 +580,14 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 				//  c1   c2  xÅ®
 				//           yÅ´
 				//  c3   c4   
-				double c1 = (1 - tZ) * inImg2D1[inXpre + inYpre * inImgW] + tZ * inImg2D2[inXpre + inYpre * inImgW];
-				double c2 = (1 - tZ) * inImg2D1[inXnex + inYpre * inImgW] + tZ * inImg2D2[inXnex + inYpre * inImgW];
-				double c3 = (1 - tZ) * inImg2D1[inXpre + inYnex * inImgW] + tZ * inImg2D2[inXpre + inYnex * inImgW];
-				double c4 = (1 - tZ) * inImg2D1[inXnex + inYnex * inImgW] + tZ * inImg2D2[inXnex + inYnex * inImgW];
-				double c13 = (1 - tY) * c1 + tY * c3;
-				double c24 = (1 - tY) * c2 + tY * c4;
-				double c1324 = (1 - tX) * c13 + tX * c24;
+				double c1    = (1 - tZ) * inImg2D1[inXpre + inYpre * inImgW] + tZ * inImg2D2[inXpre + inYpre * inImgW];
+				double c2    = (1 - tZ) * inImg2D1[inXnex + inYpre * inImgW] + tZ * inImg2D2[inXnex + inYpre * inImgW];
+				double c3    = (1 - tZ) * inImg2D1[inXpre + inYnex * inImgW] + tZ * inImg2D2[inXpre + inYnex * inImgW];
+				double c4    = (1 - tZ) * inImg2D1[inXnex + inYnex * inImgW] + tZ * inImg2D2[inXnex + inYnex * inImgW];
+				double c13   = (1 - tY) * c1 + tY * c3;
+				double c24   = (1 - tY) * c2 + tY * c4;
+				double c1324 = (1 - tX) * c13+ tX * c24;
+				t_cropD(c1324, SHRT_MIN, SHRT_MAX);
 				short  s1324 = (short)c1324;
 				fwrite(&s1324, sizeof(short), 1, fp);
 			}
@@ -606,3 +600,12 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 	fclose(fp);
 }
 
+
+
+void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3dUshort()
+{
+	//todo 
+	//	make this sined short and u short!!
+
+
+}
