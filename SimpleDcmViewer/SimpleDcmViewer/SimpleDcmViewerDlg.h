@@ -11,6 +11,11 @@ class CSimpleDcmViewerDlg : public CDialogEx
 {
 
 	bool m_bPictContInit;
+	int m_pcW, m_pcH, m_pcX, m_pcY;
+
+	void NewVolumeLoaded();
+	void drawPictCtrl();
+
 
 // Construction
 public:
@@ -50,4 +55,9 @@ public:
 	CSliderCtrl m_slider_z;
 	CSliderCtrl m_slider_winLvMin;
 	CSliderCtrl m_slider_winLvMax;
+	afx_msg void OnDropFiles(HDROP hDropInfo);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnBnClickedButtonExporttraw3d();
+	afx_msg void OnBnClickedButtonQuit();
 };

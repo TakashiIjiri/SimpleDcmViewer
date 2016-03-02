@@ -39,6 +39,12 @@
     <ClInclude Include="ThirdParty\tdcmtk.h">
       <Filter>ThirdParty</Filter>
     </ClInclude>
+    <ClInclude Include="TFileManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TExportDataSizeDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SimpleDcmViewer.cpp">
@@ -52,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="ThirdParty\tdcmtk.cpp">
       <Filter>ThirdParty</Filter>
+    </ClCompile>
+    <ClCompile Include="TFileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TExportDataSizeDlg.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

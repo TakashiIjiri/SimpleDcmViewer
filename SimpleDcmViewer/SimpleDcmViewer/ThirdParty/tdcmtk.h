@@ -42,12 +42,19 @@ public:
     double getZPos   ( ){ return m_pos  [2]; }
 
     void getFormat( int &chNum, int &bitNum, int &bSigned );
-    bool getPixels_SInt16( const Sint16* &data );
 
-    //bool getTagValue( DcmTagKey tagKey, int &value );
+
+	//data should be allocated
+	bool getPixelsToFlt(float* data);
+
+
 
 private:
     //DcmElement* getTagElem(DcmTagKey tagKey);
+
+	//data should not be allocated
+	bool getPixels_SInt16(const Sint16* &data);
+	bool getPixels_UInt16(const Uint16* &data);
 
 };
 

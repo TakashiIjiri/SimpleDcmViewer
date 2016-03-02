@@ -23,8 +23,9 @@ END_MESSAGE_MAP()
 CSimpleDcmViewerApp::CSimpleDcmViewerApp()
 {
 
+	FILE *fp;
 	AllocConsole();
-	freopen("CONOUT$", "a", stderr);
+	freopen_s(&fp, "CONOUT$", "a", stderr);
 	COORD consoleCoord;
 	consoleCoord.X = 80;
 	consoleCoord.Y = 1200;

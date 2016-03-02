@@ -141,3 +141,62 @@ bool Tdcmtk::getPixels_SInt16(const Sint16* &data)
     return true;
 }
 
+
+bool Tdcmtk::getPixels_UInt16(const Uint16* &data)
+{
+	if (!m_dataSet)
+	{
+		t_info("fails to open the file");
+		return false;
+	}
+	if (m_nBits != 16 || m_bSined) {
+		t_info("wrong format\n");
+		return false;
+	}
+
+	// Load pixel data into memory
+	unsigned long psize = 0;
+
+	if (m_dataSet->findAndGetUint16Array(DCM_PixelData, (const Uint16*&)data, &psize, false).bad()) return false;
+	//if ( m_dataSet->findAndGetSint16Array( DCM_PixelData, data, &psize,false ).bad() ) return false;
+
+	return true;
+}
+
+
+
+//data should be allocated
+bool Tdcmtk::getPixelsToFlt(float* data)
+{
+	if (!m_dataSet)
+	{
+		t_info("fails to open the file");
+		return false;
+	}
+
+	if (m_nBits == 16 && m_bSined) 
+	{
+		const Sint16 *v = 0;
+		getPixels_SInt16(v);
+		for (int i = 0, s = m_W * m_H; i < s; ++i) data[i] = v[i];
+		delete[] v;
+	}
+	else if (m_nBits == 16 && !m_bSined)
+	{
+		const Uint16 *v = 0;
+		getPixels_UInt16(v);
+		for (int i = 0, s = m_W * m_H; i < s; ++i) data[i] = v[i];
+		delete[] v;
+	}
+	else
+	{
+		t_info("this file type is not implemeted yet\n");
+		return false;
+	}
+
+	return true;
+}
+
+
+
+
