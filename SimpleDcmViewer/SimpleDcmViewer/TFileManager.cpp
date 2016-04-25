@@ -110,10 +110,13 @@ void TFileManager::loadDirectry(const string dirPath)
 	}
 
 
+
 	//load all dicom file
 	for (int k = 0; k < m_D; ++k)
 	{
+
 		Tdcmtk tdcm( (dirPath + "\\" + files[k] ).c_str());
+
 		int W, H, fNum;
 		tdcm.getSize(W, H, fNum);
 
@@ -123,6 +126,7 @@ void TFileManager::loadDirectry(const string dirPath)
 			exit(0);
 		}
 		if (k == 1) m_pD = fabs(zPos0 - tdcm.getZPos());
+
 
 		m_volume[k] = new float[m_W * m_H];
 		tdcm.getPixelsToFlt(m_volume[k]);
@@ -135,7 +139,7 @@ void TFileManager::loadDirectry(const string dirPath)
 
 	for (int z = 0; z < m_D; ++z)
 	{ 
-		for (int i = 0; i < m_W*m_W; ++i)
+		for (int i = 0; i < m_W*m_H; ++i)
 		{
 			m_valMin = min(m_valMin, m_volume[z][i]);
 			m_valMax = max(m_valMax, m_volume[z][i]);

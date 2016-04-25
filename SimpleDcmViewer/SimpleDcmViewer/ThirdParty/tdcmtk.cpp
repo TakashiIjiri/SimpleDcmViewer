@@ -85,17 +85,22 @@ Tdcmtk::Tdcmtk( const char *fname )
     t_getTagValInt(m_dataSet, DCM_NumberOfFrames     , m_fNum );
 
     //pixel configureation
-    int bs, ba, hb, spp, plc, pr;
+    int bs, ba, hb, spp, plc, pr, cm;
     t_getTagValInt(m_dataSet, DCM_BitsStored         , bs     ); // bits for 1 pixel (actually used)
     t_getTagValInt(m_dataSet, DCM_BitsAllocated      , ba     ); // bits for 1 pixel (allocated)
     t_getTagValInt(m_dataSet, DCM_HighBit            , hb     );
     t_getTagValInt(m_dataSet, DCM_SamplesPerPixel    , spp    ); // 1:gray, 3:rgb
     t_getTagValInt(m_dataSet, DCM_PlanarConfiguration, plc    );
     t_getTagValInt(m_dataSet, DCM_PixelRepresentation, pr     ); //unsigned (0) or signed (1)
+    t_getTagValInt(m_dataSet, DCM_LossyImageCompression, cm     ); //unsigned (0) or signed (1)
+	
+
     m_nBits      = ba ;
     m_bSined     = pr ;
     m_bChNum     = spp;
     m_bChArrange = plc;
+
+	fprintf( stderr, "%d %d %d %d   [%d]\n", m_nBits, m_bSined, m_bChNum, m_bChArrange, cm);
 
 
 
@@ -121,6 +126,7 @@ void Tdcmtk::getFormat( int &chNum, int &bitNum, int &bSigned  )
 //他のformatは必要に応じて作る
 bool Tdcmtk::getPixels_SInt16(const Sint16* &data)
 {
+	fprintf( stderr, "getPixels_SInt16\n");
     if ( !m_dataSet )
     {
         t_info("fails to open the file" );
@@ -144,6 +150,7 @@ bool Tdcmtk::getPixels_SInt16(const Sint16* &data)
 
 bool Tdcmtk::getPixels_UInt16(const Uint16* &data)
 {
+	fprintf( stderr, "getPixels_UInt16\n");
 	if (!m_dataSet)
 	{
 		t_info("fails to open the file");
