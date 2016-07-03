@@ -102,8 +102,6 @@ void TFileManager::loadDirectry(const string dirPath)
 		m_pW  = tdcm.getPitchX();
 		m_pH  = tdcm.getPitchY();
 		zPos0 = tdcm.getZPos();
-		fprintf(stderr, "resolution %d %d %d\n", m_W, m_H, m_D);
-
 		m_volume = new float*[m_D];
 		fprintf(stderr, "resolution %d %d %d\n", m_W, m_H, m_D);
 
@@ -114,7 +112,6 @@ void TFileManager::loadDirectry(const string dirPath)
 	//load all dicom file
 	for (int k = 0; k < m_D; ++k)
 	{
-
 		Tdcmtk tdcm( (dirPath + "\\" + files[k] ).c_str());
 
 		int W, H, fNum;
@@ -122,7 +119,7 @@ void TFileManager::loadDirectry(const string dirPath)
 
 		if (fNum > 1 || W != m_W || H != m_H )
 		{
-			AfxMessageBox("error strange input");
+			AfxMessageBox("Format Error, one or some dicom file(s) have a different resolution");
 			exit(0);
 		}
 		if (k == 1) m_pD = fabs(zPos0 - tdcm.getZPos());
@@ -131,11 +128,11 @@ void TFileManager::loadDirectry(const string dirPath)
 		m_volume[k] = new float[m_W * m_H];
 		tdcm.getPixelsToFlt(m_volume[k]);
 
+		if( k % 100 == 0 ) fprintf( stderr, "[%d/%d]done...", k, m_D);
 	}
 
 	m_valMin =  FLT_MAX;
 	m_valMax = -FLT_MAX;
-
 
 	for (int z = 0; z < m_D; ++z)
 	{ 

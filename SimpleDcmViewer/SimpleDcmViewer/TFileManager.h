@@ -31,7 +31,6 @@ public:
 	void getSliceImg_Zth_slice(int z, float *img)
 	{
 		memcpy(img, m_volume[z], sizeof(float) * m_W * m_H);
-
 	}
 
 

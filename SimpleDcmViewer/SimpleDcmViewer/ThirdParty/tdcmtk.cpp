@@ -100,9 +100,7 @@ Tdcmtk::Tdcmtk( const char *fname )
     m_bChNum     = spp;
     m_bChArrange = plc;
 
-	fprintf( stderr, "%d %d %d %d   [%d]\n", m_nBits, m_bSined, m_bChNum, m_bChArrange, cm);
-
-
+	//fprintf( stderr, "%d %d %d %d   [%d]\n", m_nBits, m_bSined, m_bChNum, m_bChArrange, cm);
 
     t_getPitchInfo( m_FileFormat, m_pitch, m_pos );
 }
@@ -126,7 +124,7 @@ void Tdcmtk::getFormat( int &chNum, int &bitNum, int &bSigned  )
 //他のformatは必要に応じて作る
 bool Tdcmtk::getPixels_SInt16(const Sint16* &data)
 {
-	fprintf( stderr, "getPixels_SInt16\n");
+	//fprintf( stderr, "getPixels_SInt16\n");
     if ( !m_dataSet )
     {
         t_info("fails to open the file" );
@@ -150,7 +148,7 @@ bool Tdcmtk::getPixels_SInt16(const Sint16* &data)
 
 bool Tdcmtk::getPixels_UInt16(const Uint16* &data)
 {
-	fprintf( stderr, "getPixels_UInt16\n");
+	//fprintf( stderr, "getPixels_UInt16\n");
 	if (!m_dataSet)
 	{
 		t_info("fails to open the file");
