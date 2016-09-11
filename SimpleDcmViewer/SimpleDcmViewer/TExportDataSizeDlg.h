@@ -15,8 +15,7 @@ private:
 
 public:
 	int  m_expW, m_expH, m_expD;
-	bool m_bFlipZ      ;
-
+	bool m_bFlipInZ;
 	void updateEditBoxInfo();
 
 public:
@@ -42,37 +41,3 @@ public:
 
 
 
-
-
-/*
-
-class TDlgVolExportParam : public CDialogEx
-{
-DECLARE_DYNAMIC(TDlgVolExportParam)
-
-
-
-public:
-TDlgVolExportParam(int W, int H, int D, CWnd* pParent = NULL);   // 標準コンストラクター
-virtual ~TDlgVolExportParam();
-
-// ダイアログ データ
-enum { IDD = IDD_DIALOG1 };
-
-protected:
-virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV サポート
-
-DECLARE_MESSAGE_MAP()
-public:
-CSliderCtrl m_slider_exportVolWidth;
-CButton m_check_nearest;
-CButton m_check_linear;
-virtual BOOL OnInitDialog();
-afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-afx_msg void OnBnClickedCheckExpNearest();
-afx_msg void OnBnClickedCheckExpLinear ();
-CButton m_check_flipz;
-afx_msg void OnBnClickedCheckExpFlipz();
-};
-
-*/

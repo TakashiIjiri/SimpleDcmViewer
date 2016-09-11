@@ -78,7 +78,7 @@ void TExportDataSizeDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollB
 
 void TExportDataSizeDlg::OnBnClickedCheckFlip()
 {
-	m_bFlipZ = m_check_flipz.GetCheck() ? true : false;
+	m_bFlipInZ = m_check_flipz.GetCheck() ? true : false;
 }
 
 
@@ -92,8 +92,8 @@ BOOL TExportDataSizeDlg::OnInitDialog()
 	m_slider.SetPos(m_W);
 	updateEditBoxInfo();
 
-	m_bFlipZ = true;
-	m_check_flipz.SetCheck(1);
+	m_bFlipInZ = false;
+	m_check_flipz.SetCheck(0);
 
 
 

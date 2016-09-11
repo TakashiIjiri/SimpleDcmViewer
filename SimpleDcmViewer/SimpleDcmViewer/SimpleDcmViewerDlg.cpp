@@ -217,7 +217,7 @@ void CSimpleDcmViewerDlg::drawPictCtrl()
 	const int    imgW = TFileManager::getInst()->m_W;
 	const int    imgH = TFileManager::getInst()->m_H;
 	const int    imgD = TFileManager::getInst()->m_D;
-	const int    imgZ = m_slider_z       .GetPos();
+	const int    imgZ = - m_slider_z       .GetPos();
 	const float  vMax = (float)m_slider_winLvMax.GetPos();
 	const float  vMin = (float)m_slider_winLvMin.GetPos();
 	int x0 = m_spin_clipXmin.GetPos32(), x1 = m_spin_clipXmax.GetPos32();  t_cropI(x0, 0, imgW - 1);  t_cropI(x0, 0, imgW - 1);
@@ -417,7 +417,7 @@ void CSimpleDcmViewerDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScroll
 	if (*pScrollBar == m_slider_z)
 	{
 		CString CStrZ;
-		CStrZ.Format("%d", m_slider_z.GetPos());
+		CStrZ.Format("%d", -m_slider_z.GetPos());
 		((CEdit*)GetDlgItem(IDC_EDIT_ZVALUE))->SetWindowTextA(CStrZ);
 
 		Invalidate(FALSE);
@@ -470,9 +470,9 @@ void CSimpleDcmViewerDlg::NewVolumeLoaded()
 	((CEdit*)GetDlgItem(IDC_EDIT_WINLV_MIN))->SetWindowTextA(CStrMin);
 
 	//z slider
-	m_slider_z.SetRange(0, D - 1);
-	m_slider_z.SetPos  (D / 2);
-	CString CStrZ; CStrZ.Format("%d", m_slider_z.GetPos());
+	m_slider_z.SetRange( -(D - 1), 0);
+	m_slider_z.SetPos  ( - (D / 2) );
+	CString CStrZ; CStrZ.Format("%d", - m_slider_z.GetPos());
 	((CEdit*)GetDlgItem(IDC_EDIT_ZVALUE))->SetWindowTextA(CStrZ);
 
 	RedrawWindow();
@@ -519,7 +519,7 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 	int  outW   = paramDlg.m_expW;
 	int  outH   = paramDlg.m_expH;
 	int  outD   = paramDlg.m_expD;
-	bool bFlipZ = paramDlg.m_bFlipZ;
+	bool bFlipZ = paramDlg.m_bFlipInZ;
 	double rateW = (in_x1 - in_x0 + 1) / (double)outW;
 	double rateH = (in_y1 - in_y0 + 1) / (double)outH;
 	double rateD = (in_z1 - in_z0 + 1) / (double)outD;

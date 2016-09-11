@@ -107,8 +107,6 @@ void TFileManager::loadDirectry(const string dirPath)
 
 	}
 
-
-
 	//load all dicom file
 	for (int k = 0; k < m_D; ++k)
 	{
