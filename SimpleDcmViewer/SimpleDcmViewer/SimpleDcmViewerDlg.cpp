@@ -554,7 +554,7 @@ void CSimpleDcmViewerDlg::OnBnClickedButtonExporttraw3d()
 	for (int z = 0; z < outD; ++z)
 	{
 		double zPos = (!bFlipZ) ? (z + 0.5) * rateD + in_z0 :
-			(outD - 1 - z + 0.5) * rateD + in_z0;
+			                        (outD - 1 - z + 0.5) * rateD + in_z0;
 		int inZpre = (int)(zPos - 0.5); t_cropI(inZpre, in_z0, in_z1);
 		int inZnex = (int)(zPos + 0.5); t_cropI(inZnex, in_z0, in_z1);
 		double tZ = zPos - (inZpre + 0.5);

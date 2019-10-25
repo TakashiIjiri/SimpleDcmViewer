@@ -124,7 +124,7 @@ void TFileManager::loadDirectry(const string dirPath)
 
 
 		m_volume[k] = new float[m_W * m_H];
-		tdcm.getPixelsToFlt(m_volume[k]);
+		tdcm.getPixelsAs<float>(m_volume[k]);
 
 		if( k % 100 == 0 ) fprintf( stderr, "[%d/%d]done...", k, m_D);
 	}
